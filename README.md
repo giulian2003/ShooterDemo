@@ -37,10 +37,11 @@ After more then 10 years of working with OOP design patterns and reading a numbe
 
 **Note (Visual Studio):** open ShooterDemo.sln, set the ShooterDemo as StartUp Project and set the Working Directory to `$(ProjectDir)/bin` for each Configuration that you are using (Debug, Release, etc.)
 
-## Run ##
+## Run (Windows 7 OS)##
 
 **Dependencies:** OpenGL 4.5, [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
+Unzip `bin/win_bin.zip` and `lib/win_lib.zip` files into each directory. These steps are needed because github would not allow me to upload .lib or .dll files.
 
 `cd ./bin`
 
