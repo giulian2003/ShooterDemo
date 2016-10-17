@@ -446,5 +446,3 @@ namespace shooter {
     }
   }
 }
-
-

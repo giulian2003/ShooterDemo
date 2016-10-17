@@ -10,11 +10,12 @@
 // product documentation would be appreciated but is not required.
 //
 
-#include <sys_physics.hpp>
-#include <Q3Map.hpp>
-#include <nav_mesh.hpp>
-#include <scene.hpp>
-#include <constants.hpp>
+#include "sys_physics.hpp"
+#include "Q3Map.hpp"
+#include "nav_mesh.hpp"
+#include "scene.hpp"
+#include "constants.hpp"
+
 #include <DetourNavMeshQuery.h>
 
 #include <glm/gtc/type_ptr.hpp>

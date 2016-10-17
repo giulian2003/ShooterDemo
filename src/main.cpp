@@ -10,28 +10,14 @@
 // product documentation would be appreciated but is not required.
 //
 
-#include <GL\glew.h>
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <SDL_ttf.h>
-
-#include <nanovg.h>
-#define NANOVG_GL3_IMPLEMENTATION
-#include <nanovg_gl.h>
-
-#include <ctpl/ctpl_stl.h>
-
-#include <iostream>
-#include <string>
-
-#include <resources.hpp>
-#include <camera_utils.hpp>
+#include "resources.hpp"
+#include "camera_utils.hpp"
 #include "scene.hpp"
 #include "constants.hpp"
 #include "Q3Loader.h"
 #include "Q3Map.hpp"
 #include "nav_mesh.hpp"
-#include <sys_renderer.hpp>
+#include "sys_renderer.hpp"
 #include "sys_animation.hpp"
 #include "sys_attack.hpp"
 #include "sys_bullets.hpp"
@@ -41,6 +27,17 @@
 #include "sys_player_shoot.hpp"
 #include "sys_revive.hpp"
 #include "sys_states_time_ints.hpp"
+
+#include <iostream>
+#include <string>
+
+#include <GL\glew.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+#include <ctpl/ctpl_stl.h>
+#include <nanovg.h>
+#define NANOVG_GL3_IMPLEMENTATION
+#include <nanovg_gl.h>
 
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 768;
@@ -183,12 +180,6 @@ bool InitScreen(SDL_Window*& screen, SDL_GLContext& context, NVGcontext*& vg)
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(openglCallbackFunction, nullptr);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds, true);
-  }
-
-  if (TTF_Init() == -1)
-  {
-    std::cout << "TTF_Init failed: " << SDL_GetError() << std::endl;
-    return false;
   }
 
   vg = nvgCreateGL3(NVG_ANTIALIAS);

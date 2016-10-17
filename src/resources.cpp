@@ -10,9 +10,14 @@
 // product documentation would be appreciated but is not required.
 //
 
-#include <resources.hpp>
-#include <shader_defines.h>
-#include <shader_utils.hpp>
+#include "resources.hpp"
+#include "shader_defines.h"
+#include "shader_utils.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <filesystem> // requires at least VS2013
 
 #include <SDL_image.h>
 
@@ -22,15 +27,10 @@
 #include <glm/gtx/rotate_vector.hpp> 
 #include <glm/gtx/compatibility.hpp>
 
-#include <assimp/Importer.hpp>  //OO version Header!
+#include <assimp/Importer.hpp>
 #include <assimp/PostProcess.h>
 #include <assimp/Scene.h>
 #include <assimp/matrix4x4.h>
-
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <filesystem> // VS2013 required! This is not crossplatform but adding boost to the project proved to be a pain.
 
 using namespace std;
 using namespace glm;

@@ -1,6 +1,22 @@
+cmake_minimum_required(VERSION 3.3)
+
 project(ShooterDemo)
 
-cmake_minimum_required(VERSION 2.8.8)
+if(NOT EXISTS ${PROJECT_BINARY_DIR}/lib/assimp.lib)
+	# Unpack libraries
+	execute_process(
+		COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_BINARY_DIR}/lib/DemoShooter_win7_x32_lib.tar.gz
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+	)
+endif()
+
+if (NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
+	# Unpack binaries
+	execute_process(
+		COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_BINARY_DIR}/bin/ShooterDemo_win7_x32_bin.tar.gz
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+	)
+endif()
 
 set(CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR})
 
@@ -12,6 +28,7 @@ MAKE_DIRECTORY(${OUTPUT_BINDIR})
 
 SET(OUTPUT_LIBDIR ${PROJECT_BINARY_DIR}/lib)
 MAKE_DIRECTORY(${OUTPUT_LIBDIR})
+
 
 SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${OUTPUT_LIBDIR} CACHE PATH "build directory")
 SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${OUTPUT_BINDIR} CACHE PATH "build directory")
@@ -34,67 +51,60 @@ ELSE()
 ENDIF()
 ENDFOREACH()
 
-set(Recast_INCLUDE_DIR contrib/Recast/Include)
-FILE(GLOB Recast_SOURCE_FILES contrib/Recast/Source/*.cpp)
-FILE(GLOB Recast_INCLUDE_FILES contrib/Recast/Include/*.h)
+set(CONTRIB_PREFIX contrib)
+
+set(Recast_INCLUDE_DIR ${CONTRIB_PREFIX}/recast_navigation/Recast/Include)
+FILE(GLOB Recast_SOURCE_FILES ${CONTRIB_PREFIX}/recast_navigation/Recast/Source/*.cpp)
+FILE(GLOB Recast_INCLUDE_FILES ${CONTRIB_PREFIX}/recast_navigation/Recast/Include/*.h)
 add_library(Recast OBJECT ${Recast_INCLUDE_FILES} ${Recast_SOURCE_FILES})
 
-set(Detour_INCLUDE_DIR contrib/Detour/Include)
-FILE(GLOB Detour_SOURCE_FILES contrib/Detour/Source/*.cpp)
-FILE(GLOB Detour_INCLUDE_FILES contrib/Detour/Include/*.h)
+set(Detour_INCLUDE_DIR ${CONTRIB_PREFIX}/recast_navigation/Detour/Include)
+FILE(GLOB Detour_SOURCE_FILES ${CONTRIB_PREFIX}/recast_navigation/Detour/Source/*.cpp)
+FILE(GLOB Detour_INCLUDE_FILES ${CONTRIB_PREFIX}/recast_navigation/Detour/Include/*.h)
 add_library(Detour OBJECT ${Detour_INCLUDE_FILES} ${Detour_SOURCE_FILES})
 
-set(DetourTileCache_INCLUDE_DIR contrib/DetourTileCache/Include)
-FILE(GLOB DetourTileCache_SOURCE_FILES contrib/DetourTileCache/Source/*.cpp)
-FILE(GLOB DetourTileCache_INCLUDE_FILES contrib/DetourTileCache/Include/*.h)
+set(DetourTileCache_INCLUDE_DIR ${CONTRIB_PREFIX}/recast_navigation/DetourTileCache/Include)
+FILE(GLOB DetourTileCache_SOURCE_FILES ${CONTRIB_PREFIX}/recast_navigation/DetourTileCache/Source/*.cpp)
+FILE(GLOB DetourTileCache_INCLUDE_FILES ${CONTRIB_PREFIX}/recast_navigation/DetourTileCache/Include/*.h)
 add_library(DetourTileCache OBJECT ${DetourTileCache_INCLUDE_FILES} ${DetourTileCache_SOURCE_FILES})
 
-set(DetourCrowd_INCLUDE_DIR contrib/DetourCrowd/Include)
-FILE(GLOB DetourCrowd_SOURCE_FILES contrib/DetourCrowd/Source/*.cpp)
-FILE(GLOB DetourCrowd_INCLUDE_FILES contrib/DetourCrowd/Include/*.h)
+set(DetourCrowd_INCLUDE_DIR ${CONTRIB_PREFIX}/recast_navigation/DetourCrowd/Include)
+FILE(GLOB DetourCrowd_SOURCE_FILES ${CONTRIB_PREFIX}/recast_navigation/DetourCrowd/Source/*.cpp)
+FILE(GLOB DetourCrowd_INCLUDE_FILES ${CONTRIB_PREFIX}/recast_navigation/DetourCrowd/Include/*.h)
 add_library(DetourCrowd OBJECT ${DetourCrowd_INCLUDE_FILES} ${DetourCrowd_SOURCE_FILES})
 
-set(DebugUtils_INCLUDE_DIR contrib/DebugUtils/Include)
-FILE(GLOB DebugUtils_SOURCE_FILES contrib/DebugUtils/Source/*.cpp)
-FILE(GLOB DebugUtils_INCLUDE_FILES contrib/DebugUtils/Include/*.h)
+set(DebugUtils_INCLUDE_DIR ${CONTRIB_PREFIX}/recast_navigation/DebugUtils/Include)
+FILE(GLOB DebugUtils_SOURCE_FILES ${CONTRIB_PREFIX}/recast_navigation/DebugUtils/Source/*.cpp)
+FILE(GLOB DebugUtils_INCLUDE_FILES ${CONTRIB_PREFIX}/recast_navigation/DebugUtils/Include/*.h)
 add_library(DebugUtils OBJECT ${DebugUtils_INCLUDE_FILES} ${DebugUtils_SOURCE_FILES})
 
-set(minizip_INCLUDE_DIR contrib/minizip)
-FILE(GLOB minizip_FILES contrib/minizip/*.*)
+set(minizip_INCLUDE_DIR ${CONTRIB_PREFIX}/minizip)
+FILE(GLOB minizip_FILES ${CONTRIB_PREFIX}/minizip/*.*)
 add_library(minizip OBJECT ${minizip_FILES})
 
-set(nanovg_INCLUDE_DIR contrib/nanovg)
-FILE(GLOB nanovg_FILES contrib/nanovg/*.*)
+set(nanovg_INCLUDE_DIR ${CONTRIB_PREFIX}/nanovg)
+FILE(GLOB nanovg_FILES ${CONTRIB_PREFIX}/nanovg/*.*)
 add_library(nanovg OBJECT ${nanovg_FILES})
+
 
 # Required packages
 find_package(OpenGL REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(SDL2TTF REQUIRED)
-find_package(SDL2IMAGE REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(ZLIB REQUIRED)
-find_package(assimp REQUIRED)
 
 # Dependencies and include locations
 include_directories(include)
 include_directories(bin/res/shaders)
-include_directories(${SDL2_INCLUDE_DIR})
-include_directories(${SDL2TTF_INCLUDE_DIR})
-include_directories(${SDL2IMAGE_INCLUDE_DIR})
+include_directories(${CONTRIB_PREFIX})
+include_directories(${CONTRIB_PREFIX}/GL)
+include_directories(${CONTRIB_PREFIX}/glm)
+include_directories(${CONTRIB_PREFIX}/SDL2)
+include_directories(${CONTRIB_PREFIX}/assimp)
+include_directories(${CONTRIB_PREFIX}/minizip)
 include_directories(${OPENGL_INCLUDE_DIR})
-include_directories(${GLEW_INCLUDE_DIR})
-include_directories(${GLM_INCLUDE_DIR})
-include_directories(${ZLIB_INCLUDE_DIRS})
-include_directories(${ASSIMP_INCLUDE_DIRS})
-include_directories(${ASSIMP_INCLUDE_DIRS})
 include_directories(${Recast_INCLUDE_DIR})
 include_directories(${Detour_INCLUDE_DIR})
 include_directories(${DetourTileCache_INCLUDE_DIR})
 include_directories(${DetourCrowd_INCLUDE_DIR})
 include_directories(${DebugUtils_INCLUDE_DIR})
-include_directories(${NavMesh_INCLUDE_DIR})
-include_directories(${minizip_INCLUDE_DIR})
 include_directories(${nanovg_INCLUDE_DIR})
 
 # Project headers
@@ -122,10 +132,11 @@ add_executable(
   $<TARGET_OBJECTS:nanovg>)
 
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
-  ${GLEW_LIBRARY}
-  ${SDL2_LIBRARY}
-  ${SDL2TTF_LIBRARY}
-  ${SDL2IMAGE_LIBRARY}
-  ${ZLIB_LIBRARY}
-  ${ASSIMP_LIBRARIES}
+  lib/SDL2
+  lib/SDL2main
+  lib/SDL2_image
+  lib/SDL2_ttf
+  lib/assimp
+  lib/zdll
+  lib/glew32
   ${OPENGL_LIBRARIES})

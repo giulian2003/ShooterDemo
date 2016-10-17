@@ -24,9 +24,7 @@
 #include <unordered_map>
 
 #include <unzip.h>
-
 #include <SDL_image.h>
-
 #include <glm/gtx/vector_angle.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtc/type_ptr.hpp>

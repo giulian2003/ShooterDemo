@@ -14,10 +14,9 @@
 
 #include <iostream>
 #include <fstream>
+
 #include <assimp/texture.h>
-
 #include <SDL_image.h>
-
 #include <GL/glew.h>
 
 using namespace std;
@@ -346,4 +345,3 @@ namespace ShaderUtils {
     return texture;
   }
 }
-

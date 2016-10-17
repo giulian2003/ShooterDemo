@@ -610,8 +610,8 @@ void NavMesh::DebugRender() const
   //duDebugDrawContours(&dd, *m_cset);
   //duDebugDrawRegionConnections(&dd, *m_cset);
   //duDebugDrawPolyMesh(&dd, *m_pmesh);
-  //duDebugDrawPolyMeshDetail(&dd, *m_dmesh);
-  duDebugDrawNavMesh(&dd, *m_navMesh, 0);
+  duDebugDrawPolyMeshDetail(&dd, *m_dmesh);
+  //duDebugDrawNavMesh(&dd, *m_navMesh, 0);
   //duDebugDrawNavMeshNodes(&dd, *m_navQuery);
 
   for (const auto& verts : m_DebugOffMeshConVerts)

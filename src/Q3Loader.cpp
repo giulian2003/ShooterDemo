@@ -10,7 +10,8 @@
 *
 */
 
-#include <Q3Loader.h>
+#include "Q3Loader.h"
+
 #include <cstdio>
 
 template <class taType>

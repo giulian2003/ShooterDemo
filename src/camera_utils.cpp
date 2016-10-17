@@ -10,9 +10,10 @@
 // product documentation would be appreciated but is not required.
 //
 
-#include "components.hpp"
+
 #include "camera_utils.hpp"
 #include "Q3Map.hpp"
+#include "components.hpp"
 
 #include <iostream>
 
