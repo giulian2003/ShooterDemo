@@ -2,33 +2,35 @@ cmake_minimum_required(VERSION 3.3)
 
 project(ShooterDemo)
 
-if(NOT EXISTS ${PROJECT_BINARY_DIR}/lib/assimp.lib)
-	# Unpack libraries
-	execute_process(
-		COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_BINARY_DIR}/lib/DemoShooter_win7_x32_lib.tar.gz
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-	)
-endif()
+# if we are compiling on windows, default to using local contrib include files and libraries
+# otherwise, on linux, mac, search for global libraries since there might be version mismatch 
+# between local include files, and system libraries
+IF(WIN32)
+	option(LocalIncludes "Use local includes" ON)
+ELSE(WIN32)
+	option(LocalIncludes "Use local includes" OFF)
+ENDIF(WIN32)
 
-if (NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
-	# Unpack binaries
-	execute_process(
-		COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_BINARY_DIR}/bin/ShooterDemo_win7_x32_bin.tar.gz
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-	)
-endif()
+# allow GCC to build with C++14
+# need -fpermissive to forgive a few const errors
+IF(CMAKE_COMPILER_IS_GNUCXX)
+   set(CMAKE_CXX_FLAGS "-Wall -fpermissive -std=c++14 -ggdb ${CMAKE_CXX_FLAGS}")
+   set(FILESYSTEM_LIB stdc++fs)
+ENDIF()
+
+# extra CMAKE modules
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+
+# Setting up build structure
 
 set(CMAKE_PREFIX_PATH ${PROJECT_SOURCE_DIR})
-
-# CMAKE extensions
-set(CMAKE_MODULE_PATH cmake_modules)
 
 SET(OUTPUT_BINDIR ${PROJECT_BINARY_DIR}/bin)
 MAKE_DIRECTORY(${OUTPUT_BINDIR})
 
 SET(OUTPUT_LIBDIR ${PROJECT_BINARY_DIR}/lib)
 MAKE_DIRECTORY(${OUTPUT_LIBDIR})
-
 
 SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY  ${OUTPUT_LIBDIR} CACHE PATH "build directory")
 SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${OUTPUT_BINDIR} CACHE PATH "build directory")
@@ -50,6 +52,39 @@ ELSE()
   SET("CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CONF}" "${OUTPUT_LIBDIR}")
 ENDIF()
 ENDFOREACH()
+
+# Unpacking Resources:
+# Windows build comes with included development libraries
+IF(WIN32)
+	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/lib/assimp.lib)
+		# Unpack libraries
+		execute_process(
+			COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_SOURCE_DIR}/lib/DemoShooter_win7_x32_lib.tar.gz
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		)
+	ENDIF()
+	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
+		execute_process(
+			COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_SOURCE_DIR}/bin/ShooterDemo_win7_x32_bin.tar.gz
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+		)
+	ENDIF()
+ENDIF(WIN32)
+
+#Linux build needs system development libraries, so we only need to extract the res folder
+IF(UNIX)
+	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
+		# Unpack resources only, don't need the windows libs
+		execute_process(
+			COMMAND tar -xzvf ${PROJECT_SOURCE_DIR}/bin/ShooterDemo_win7_x32_bin.tar.gz res/
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+		)
+	ENDIF()
+ENDIF(UNIX)
+
+
+
+# Set up project structure
 
 set(CONTRIB_PREFIX contrib)
 
@@ -94,18 +129,36 @@ find_package(OpenGL REQUIRED)
 include_directories(include)
 include_directories(bin/res/shaders)
 include_directories(${CONTRIB_PREFIX})
-include_directories(${CONTRIB_PREFIX}/GL)
-include_directories(${CONTRIB_PREFIX}/glm)
-include_directories(${CONTRIB_PREFIX}/SDL2)
-include_directories(${CONTRIB_PREFIX}/assimp)
 include_directories(${CONTRIB_PREFIX}/minizip)
-include_directories(${OPENGL_INCLUDE_DIR})
+
 include_directories(${Recast_INCLUDE_DIR})
 include_directories(${Detour_INCLUDE_DIR})
 include_directories(${DetourTileCache_INCLUDE_DIR})
 include_directories(${DetourCrowd_INCLUDE_DIR})
 include_directories(${DebugUtils_INCLUDE_DIR})
 include_directories(${nanovg_INCLUDE_DIR})
+
+IF(LocalIncludes)
+	include_directories(${CONTRIB_PREFIX}/SDL2)
+	include_directories(${CONTRIB_PREFIX}/assimp)
+	include_directories(${CONTRIB_PREFIX}/GL)
+	include_directories(${CONTRIB_PREFIX}/glm)
+ELSE(LocalIncludes)
+	find_package(SDL2 		REQUIRED)
+	find_package(SDL2_image REQUIRED)
+	find_package(SDL2_ttf 	REQUIRED)
+	find_package(assimp 	REQUIRED)
+	find_package(ZLIB 		REQUIRED)
+	find_package(GLEW 		REQUIRED)
+	find_package(glm 		REQUIRED)
+	include_directories(${OPENGL_INCLUDE_DIR})
+	include_directories(${SDL2_INCLUDE_DIR})
+	include_directories(${assimp_INCLUDE_DIRS})
+	include_directories(${ZLIB_INCLUDE_DIRS})
+	include_directories(${GLEW_INCLUDE_DIRS})
+	include_directories(${GLM_INCLUDE_DIRS})
+ENDIF(LocalIncludes)
+
 
 # Project headers
 file(GLOB HEADER_FILES1 include/*.h)
@@ -131,12 +184,24 @@ add_executable(
   $<TARGET_OBJECTS:minizip>
   $<TARGET_OBJECTS:nanovg>)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
-  lib/SDL2
-  lib/SDL2main
-  lib/SDL2_image
-  lib/SDL2_ttf
-  lib/assimp
-  lib/zdll
-  lib/glew32
-  ${OPENGL_LIBRARIES})
+IF(WIN32)
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
+		lib/SDL2
+  		lib/SDL2main
+  		lib/SDL2_image
+  		lib/SDL2_ttf
+  		lib/assimp
+  		lib/zdll
+  		lib/glew32
+  		${OPENGL_LIBRARIES})
+ELSE(WIN32)
+	TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
+		${SDL2_LIBRARY}
+	  	${SDL2_IMAGE_LIBRARY}
+	  	${SDL2_TTF_LIBRARY}
+	  	${assimp_LIBRARIES}
+	  	${ZLIB_LIBRARY}
+	  	${OPENGL_LIBRARIES}
+		${GLEW_LIBRARIES}
+        ${FILESYSTEM_LIB})
+ENDIF(WIN32)

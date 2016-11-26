@@ -101,7 +101,7 @@ namespace
   typedef unordered_map<string, TFilePosAndLen> TArchivedFilesInfoMap;
 
   /// Read files names and positions from a zip archive
-  TArchivedFilesInfoMap ReadArchiveFileNames(unzFile zipFileHandle, TFilePosAndLen& bspFilePosAndLen = TFilePosAndLen())
+  TArchivedFilesInfoMap ReadArchiveFileNames(unzFile zipFileHandle, TFilePosAndLen& bspFilePosAndLen)
   {
     TArchivedFilesInfoMap result;
 

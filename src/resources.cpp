@@ -17,10 +17,16 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-#include <filesystem> // requires at least VS2013
+
+#ifdef _WIN32
+    #include <filesystem> // requires at least VS2013
+    using namespace std::tr2::sys;
+#elif __linux__
+    #include <experimental/filesystem> // tested with gcc version 5.3.1 20160406 (Red Hat 5.3.1-6) (GCC)
+    using namespace std::experimental::filesystem;
+#endif
 
 #include <SDL_image.h>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -28,13 +34,12 @@
 #include <glm/gtx/compatibility.hpp>
 
 #include <assimp/Importer.hpp>
-#include <assimp/PostProcess.h>
-#include <assimp/Scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 #include <assimp/matrix4x4.h>
 
 using namespace std;
 using namespace glm;
-using namespace std::tr2::sys;
 using namespace ShaderUtils;
 
 namespace shooter {
