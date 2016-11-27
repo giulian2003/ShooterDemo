@@ -59,7 +59,7 @@ IF(WIN32)
 	IF(NOT EXISTS ${WIN_LIBS_ARCHIVE_PATH})
 		# Download Windows libraries
 		message("Downloading Windows libraries ...")
-		file(DOWNLOAD "https://www.dropbox.com/s/iv71iol32phzk14/${WIN_LIBS_ARCHIVE_NAME}?dl=1" ${WIN_LIBS_ARCHIVE_PATH} SHOW_PROGRESS)
+		file(DOWNLOAD https://github.com/giulian2003/ShooterDemo/releases/download/v1.0/${WIN_LIBS_ARCHIVE_NAME} ${WIN_LIBS_ARCHIVE_PATH} SHOW_PROGRESS)
 	ENDIF()
 		
 	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/lib/SDL2.lib)
@@ -75,7 +75,7 @@ IF(WIN32)
 	IF(NOT EXISTS ${WIN_BINS_ARCHIVE_PATH})
 		# Download Windows binaries
 		message("Downloading Windows binaries ...")
-		file(DOWNLOAD "https://www.dropbox.com/s/ul2e4u2fcw7kjpl/${WIN_BINS_ARCHIVE_NAME}?dl=1" ${WIN_BINS_ARCHIVE_PATH} SHOW_PROGRESS)
+		file(DOWNLOAD https://github.com/giulian2003/ShooterDemo/releases/download/v1.0/${WIN_BINS_ARCHIVE_NAME} ${WIN_BINS_ARCHIVE_PATH} SHOW_PROGRESS)
 	ENDIF()
 	
 	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/SDL2.dll)
@@ -92,7 +92,7 @@ set(RES_ARCHIVE_PATH ${PROJECT_BINARY_DIR}/bin/${RES_ARCHIVE_NAME})
 IF(NOT EXISTS ${RES_ARCHIVE_PATH})
 	# Download resources
 	message("Downloading resources ...")
-	file(DOWNLOAD "https://www.dropbox.com/s/jt0g9rjg4u4bt2m/${RES_ARCHIVE_NAME}?dl=1" ${RES_ARCHIVE_PATH} SHOW_PROGRESS)
+	file(DOWNLOAD https://github.com/giulian2003/ShooterDemo/releases/download/v1.0/${RES_ARCHIVE_NAME} ${RES_ARCHIVE_PATH} SHOW_PROGRESS)
 ENDIF()
 
 IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
