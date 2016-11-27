@@ -13,6 +13,7 @@
 #include "Q3Loader.h"
 
 #include <cstdio>
+#include <cstring>
 
 template <class taType>
 void swizzle3(taType* const t) {

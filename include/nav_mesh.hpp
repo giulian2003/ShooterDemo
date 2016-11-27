@@ -129,8 +129,8 @@ namespace shooter
       const float hrange,  ///< Height Range
       float& outY, ///< Floor's Y world coordinate
       float& outDistY, ///< Vertical distance to the floor
-      bool* outWalkable = NULL, ///< True if pos's Floor projection is walkable
-      float* outBorderDistance = NULL ///< Distance between the pos's Floor projection and NavMesh border
+      bool* outWalkable = nullptr, ///< True if pos's Floor projection is walkable
+      float* outBorderDistance = nullptr ///< Distance between the pos's Floor projection and NavMesh border
     ) const;
 
   private:
