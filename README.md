@@ -49,7 +49,7 @@ For Visual Studio, open ShooterDemo.sln, set the ShooterDemo as StartUp Project 
 
 ## Contrib ##
 
-- **Vlad Catoi** - Adding Linux build support. Tested with gcc version 5.3.1 20160406 (Red Hat 5.3.1-6) (GCC)
+- **Vlad Catoi** - Adding Linux build support. Tested on Fedora 23 with gcc 5.3.1
 
 ## Screenshots ##
 
