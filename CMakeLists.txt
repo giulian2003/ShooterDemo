@@ -8,7 +8,7 @@ project(ShooterDemo)
 IF(WIN32)
 	option(LocalIncludes "Use local includes" ON)
 ELSE(WIN32)
-	option(LocalIncludes "Use local includes" OFF)
+	option(LocalIncludes "Use global includes" OFF)
 ENDIF(WIN32)
 
 # allow GCC to build with C++14
@@ -20,7 +20,6 @@ ENDIF()
 
 # extra CMAKE modules
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-
 
 # Setting up build structure
 
@@ -53,35 +52,56 @@ ELSE()
 ENDIF()
 ENDFOREACH()
 
-# Unpacking Resources:
-# Windows build comes with included development libraries
+# Windows build comes with included development Binaries and Libraries
 IF(WIN32)
-	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/lib/assimp.lib)
-		# Unpack libraries
-		execute_process(
-			COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_SOURCE_DIR}/lib/DemoShooter_win7_x32_lib.tar.gz
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-		)
+	set(WIN_LIBS_ARCHIVE_NAME "ShooterDemo_win7_x32_lib.tar.gz")
+	set(WIN_LIBS_ARCHIVE_PATH ${PROJECT_BINARY_DIR}/lib/${WIN_LIBS_ARCHIVE_NAME})
+	IF(NOT EXISTS ${WIN_LIBS_ARCHIVE_PATH})
+		# Download Windows libraries
+		message("Downloading Windows libraries ...")
+		file(DOWNLOAD "https://www.dropbox.com/s/iv71iol32phzk14/${WIN_LIBS_ARCHIVE_NAME}?dl=1" ${WIN_LIBS_ARCHIVE_PATH} SHOW_PROGRESS)
 	ENDIF()
-	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
+		
+	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/lib/SDL2.lib)
+		# Unpack libraries
+		message("Unpacking Windows libraries ...")
 		execute_process(
-			COMMAND ${CMAKE_COMMAND} -E tar xzf ${PROJECT_SOURCE_DIR}/bin/ShooterDemo_win7_x32_bin.tar.gz
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-		)
+			COMMAND ${CMAKE_COMMAND} -E tar xzvf ${WIN_LIBS_ARCHIVE_PATH}
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+	ENDIF()
+	
+	set(WIN_BINS_ARCHIVE_NAME "ShooterDemo_win7_x32_bin.tar.gz")
+	set(WIN_BINS_ARCHIVE_PATH ${PROJECT_BINARY_DIR}/bin/${WIN_BINS_ARCHIVE_NAME})
+	IF(NOT EXISTS ${WIN_BINS_ARCHIVE_PATH})
+		# Download Windows binaries
+		message("Downloading Windows binaries ...")
+		file(DOWNLOAD "https://www.dropbox.com/s/ul2e4u2fcw7kjpl/${WIN_BINS_ARCHIVE_NAME}?dl=1" ${WIN_BINS_ARCHIVE_PATH} SHOW_PROGRESS)
+	ENDIF()
+	
+	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/SDL2.dll)
+		# Unpack binaries
+		message("Unpacking Windows binaries ...")
+		execute_process(
+			COMMAND ${CMAKE_COMMAND} -E tar xzvf ${WIN_BINS_ARCHIVE_PATH}
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 	ENDIF()
 ENDIF(WIN32)
 
-#Linux build needs system development libraries, so we only need to extract the res folder
-IF(UNIX)
-	IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
-		# Unpack resources only, don't need the windows libs
-		execute_process(
-			COMMAND tar -xzvf ${PROJECT_SOURCE_DIR}/bin/ShooterDemo_win7_x32_bin.tar.gz res/
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-		)
-	ENDIF()
-ENDIF(UNIX)
+set(RES_ARCHIVE_NAME "ShooterDemo_res.tar.gz")
+set(RES_ARCHIVE_PATH ${PROJECT_BINARY_DIR}/bin/${RES_ARCHIVE_NAME})
+IF(NOT EXISTS ${RES_ARCHIVE_PATH})
+	# Download resources
+	message("Downloading resources ...")
+	file(DOWNLOAD "https://www.dropbox.com/s/jt0g9rjg4u4bt2m/${RES_ARCHIVE_NAME}?dl=1" ${RES_ARCHIVE_PATH} SHOW_PROGRESS)
+ENDIF()
 
+IF(NOT EXISTS ${PROJECT_BINARY_DIR}/bin/res)
+	# Unpack resources
+	message("Unpacking resources ...")
+	execute_process(
+		COMMAND ${CMAKE_COMMAND} -E tar xzvf ${RES_ARCHIVE_PATH}
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ENDIF()
 
 
 # Set up project structure
@@ -158,7 +178,6 @@ ELSE(LocalIncludes)
 	include_directories(${GLEW_INCLUDE_DIRS})
 	include_directories(${GLM_INCLUDE_DIRS})
 ENDIF(LocalIncludes)
-
 
 # Project headers
 file(GLOB HEADER_FILES1 include/*.h)

@@ -28,24 +28,27 @@ After more then 10 years of working with OOP design patterns and reading a numbe
 - **[Assimp](https://github.com/assimp/assimp)** - loading 3D models
 - **[Recast&Detour](https://github.com/recastnavigation/recastnavigation)** - create a navigation mesh and calculate walking paths and jump down links on it.
 
-## Build (Windows OS)##
+## Build ##
 
-**Dependencies:** CMake 3.3, Visual Studio 2013-2015 (for `#include <filesystem>`)
+**Dependencies:** CMake 3.3
 
 `./cmake .`
 
-Open ShooterDemo.sln, set the ShooterDemo as StartUp Project and set the Working Directory to `$(ProjectDir)/bin` for each Configuration that you are using (Debug, Release, etc.)
+The Resources, Libraries (Windows only) and Binaries (Windows only) are automatically downloaded when running the build command.
+
+For Visual Studio, open ShooterDemo.sln, set the ShooterDemo as StartUp Project and set the Working Directory to `$(ProjectDir)/bin` for each Configuration that you are using (Debug, Release, etc.)
 
 ## Run (Windows OS)##
 
 **Dependencies:** OpenGL 4.5, [Visual C++ Redistributable for Visual Studio 2015](https://www.microsoft.com/en-us/download/details.aspx?id=48145)
 
-Extract the `bin/ShooterDemo_win7_x32_bin.tar.gz` and `lib/DemoShooter_win7_x32_lib.tar.gz` files into each directory. (Running `./cmake .` would do this automatically or just use [7Zip](http://www.7-zip.org))
-
 `cd ./bin`
 
 `./ShooterDemo.exe`
 
+## Contrib ##
+
+- **Vlad Catoi** - Adding Linux build support. Tested with gcc version 5.3.1 20160406 (Red Hat 5.3.1-6) (GCC)
 
 ## Screenshots ##
 
