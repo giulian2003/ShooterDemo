@@ -17,14 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-
-#ifdef _WIN32
-    #include <filesystem> // requires at least VS2013
-    using namespace std::tr2::sys;
-#elif __linux__
-    #include <experimental/filesystem> // tested with gcc version 5.3.1 20160406 (Red Hat 5.3.1-6) (GCC)
-    using namespace std::experimental::filesystem;
-#endif
+#include <experimental/filesystem> // Tested with Visual Studio 2015 and gcc version 5.3.1 20160406 (Red Hat 5.3.1-6) (GCC)
 
 #include <SDL_image.h>
 #include <glm/glm.hpp>
@@ -39,6 +32,7 @@
 #include <assimp/matrix4x4.h>
 
 using namespace std;
+using namespace std::experimental::filesystem;
 using namespace glm;
 using namespace ShaderUtils;
 
