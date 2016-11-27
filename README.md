@@ -14,6 +14,7 @@ After more then 10 years of working with OOP design patterns and reading a numbe
 - ***All functions should have clear Input and Output parameters.*** All functions in Systems are static functions. I found that writing functions this way makes them easier to access from other parts of code (weak dependencies) and easier to use in a different thread without locks, since it's clear what data will be read and what data will be written by the function.
 - ***Minimize the number cache misses.*** In my experience cache misses, especially in loops, cause a big performance hit. I tried as much as possible to reason about data locality when working on this project.
 - ***Lock free multi-threading.*** Using a Data Oriented Design with data organized as Structure of Arrays in the Scene and having functions with clear input and output parameters, made it easy to reason about how the data can be read/written safely from different threads and I could make the app lock free.
+- ***Use cross-platform libraries.*** I used only cross platform libraries, with the ideea that if other people want to port this on different operating systems, they should be able to do this with minimum effort.
 
 ## Libraries ##
 
