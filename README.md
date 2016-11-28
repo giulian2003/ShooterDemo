@@ -53,6 +53,6 @@ For Visual Studio, open ShooterDemo.sln, set the ShooterDemo as StartUp Project 
 
 ## Screenshots ##
 
-![](screenshots/screenshot.jpg)
+![](https://github.com/giulian2003/ShooterDemo/releases/download/v1.0/screenshot.jpg)
 
-![](screenshots/screenshot2.jpg)
+![](https://github.com/giulian2003/ShooterDemo/releases/download/v1.0/screenshot2.jpg)
